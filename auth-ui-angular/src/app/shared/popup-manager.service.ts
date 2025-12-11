@@ -13,6 +13,8 @@ export class PopupManagerService {
       message,
       duration: options?.duration ?? DEFAULT_SUCCESS_DURATION,
       positionClass: options?.positionClass ?? DEFAULT_POSITION,
+      iconType: 'svg',
+      customIcon: '/assets/icons/success.svg',
     });
   }
 
@@ -33,6 +35,8 @@ export class PopupManagerService {
       message,
       duration: options?.duration ?? DEFAULT_ERROR_DURATION,
       positionClass: options?.positionClass ?? DEFAULT_POSITION,
+      iconType: 'svg',
+      customIcon: '/assets/icons/error.svg',
     });
   }
 

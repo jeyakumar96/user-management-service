@@ -10,7 +10,7 @@ export interface PopupInstance {
   customIcon?: string; // inline svg string when iconType === 'svg'
 }
 
-export const DEFAULT_SUCCESS_DURATION = 3000;
+export const DEFAULT_SUCCESS_DURATION = 30;
 export const DEFAULT_ERROR_DURATION = 0;
 
 export const DEFAULT_POSITION = 'popup-top-right';
