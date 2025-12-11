@@ -1,11 +1,56 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../service/auth.service';
+import { PopupManagerService } from '../../shared/popup-manager.service';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
 export class Register {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private auth = inject(AuthService);
+  private popup = inject(PopupManagerService);
 
+  readonly form = this.fb.nonNullable.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]],
+    terms: [false, [Validators.requiredTrue]],
+  }, { validators: this.passwordsMatch });
+
+  private passwordsMatch(ctrl: AbstractControl): ValidationErrors | null {
+    const p = ctrl.get('password')?.value;
+    const c = ctrl.get('confirmPassword')?.value;
+    return p && c && p !== c ? { mismatch: true } : null;
+  }
+
+  onSubmit() {
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      const { name, username, email, password } = this.form.getRawValue();
+      this.auth.register({ name, username, email, password }).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.popup.showSuccess(res.message ?? 'Registered successfully', { positionClass: 'popup-top-right' });
+            this.router.navigateByUrl('/login');
+          } else {
+            this.form.setErrors({ server: res.message ?? 'Registration failed' });
+            this.popup.showError(res.message ?? 'Registration failed', { positionClass: 'popup-top-right' });
+          }
+        },
+        error: (err: { message?: string }) => {
+          this.form.setErrors({ server: err?.message ?? 'Registration failed' });
+          this.popup.showError(err?.message ?? 'Registration failed', { positionClass: 'popup-top-right' });
+        }
+      });
+    }
+  }
 }

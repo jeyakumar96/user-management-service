@@ -1,0 +1,10 @@
+    <div class="popup success show">
+      <div class="popup-content">
+        <span class="icon" *ngIf="iconType === 'svg' && customIcon" [innerHTML]="customIcon"></span>
+        <div class="text">
+          <div class="title">{{ title }}</div>
+          <div class="message">{{ message }}</div>
+        </div>
+        <button class="close" type="button" (click)="close.emit()">×</button>
+      </div>
+    </div>
