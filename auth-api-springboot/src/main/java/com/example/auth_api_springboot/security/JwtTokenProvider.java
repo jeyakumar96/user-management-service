@@ -1,6 +1,5 @@
 package com.example.auth_api_springboot.security;
 
-
 import com.example.auth_api_springboot.exception.APIException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -23,7 +23,7 @@ public class JwtTokenProvider {
     private long jwtExpirationDate;
 
     // generate JWT token
-    public String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication) {
         String username = authentication.getName();
 
         Date currentDate = new Date();
@@ -39,14 +39,39 @@ public class JwtTokenProvider {
         return token;
     }
 
-    private Key key(){
-        return Keys.hmacShaKeyFor(
-                Decoders.BASE64.decode(jwtSecret)
-        );
+    private Key key() {
+        String secret = jwtSecret == null ? "" : jwtSecret.trim();
+        byte[] keyBytes;
+        try {
+            // If the secret looks like hex (even length, hex chars), prefer HEX decode
+            if (secret.matches("^[0-9a-fA-F]+$") && (secret.length() % 2 == 0)) {
+                keyBytes = hexToBytes(secret);
+            } else {
+                // Otherwise try BASE64 (recommended by JJWT)
+                keyBytes = Decoders.BASE64.decode(secret);
+            }
+        } catch (IllegalArgumentException ex) {
+            // Fallback to UTF-8 bytes if decoding fails (treat as plain text)
+            keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        }
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private static byte[] hexToBytes(String hex) {
+        int len = hex.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            int hi = Character.digit(hex.charAt(i), 16);
+            int lo = Character.digit(hex.charAt(i + 1), 16);
+            if (hi == -1 || lo == -1)
+                throw new IllegalArgumentException("Invalid hex");
+            data[i / 2] = (byte) ((hi << 4) + lo);
+        }
+        return data;
     }
 
     // get username from Jwt token
-    public String getUsername(String token){
+    public String getUsername(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
@@ -57,8 +82,8 @@ public class JwtTokenProvider {
     }
 
     // validate Jwt token
-    public boolean validateToken(String token){
-        try{
+    public boolean validateToken(String token) {
+        try {
             Jwts.parserBuilder()
                     .setSigningKey(key())
                     .build()

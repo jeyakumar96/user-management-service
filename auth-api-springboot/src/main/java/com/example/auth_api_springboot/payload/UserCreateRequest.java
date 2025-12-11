@@ -8,11 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto {
+public class UserCreateRequest {
     @NotBlank(message = "Name is required")
     private String name;
 

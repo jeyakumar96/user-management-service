@@ -1,7 +1,5 @@
 package com.example.auth_api_springboot.service.impl;
 
-
-
 import com.example.auth_api_springboot.entity.Role;
 import com.example.auth_api_springboot.entity.User;
 import com.example.auth_api_springboot.exception.APIException;
@@ -33,7 +31,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-
     @Override
     public String login(LoginDto loginDto) {
 
@@ -48,15 +45,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String register(RegisterDto registerDto) {
+    public User register(RegisterDto registerDto) {
 
         // add check for username exists in database
-        if(userRepository.existsByUsername(registerDto.getUsername())){
+        if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Username is already exists!.");
         }
 
         // add check for email exists in database
-        if(userRepository.existsByEmail(registerDto.getEmail())){
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
         }
 
@@ -71,8 +68,6 @@ public class AuthServiceImpl implements AuthService {
         roles.add(userRole);
         user.setRoles(roles);
 
-        userRepository.save(user);
-
-        return "User registered successfully!.";
+        return userRepository.save(user);
     }
 }
