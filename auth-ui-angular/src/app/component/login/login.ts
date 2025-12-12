@@ -39,7 +39,7 @@ export class Login {
             // Decode roles from JWT and route accordingly
             const roles = this.auth.getRolesFromToken();
             const isAdmin = roles.includes('ROLE_ADMIN');
-            this.router.navigateByUrl(isAdmin ? '/admin' : '/dashboard');
+            this.router.navigateByUrl(isAdmin ? '/admin/dashboard' : '/user/dashboard');
           } else {
             this.serverError.set(res.message ?? 'Login failed');
             this.popup.showError(this.serverError()!, { positionClass: 'popup-top-right' });
