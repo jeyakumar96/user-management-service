@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,8 +49,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
-        ApiResponse resp = new ApiResponse("Delete User Success!", null);
-        return new ResponseEntity<>(resp, HttpStatus.NO_CONTENT);
+        ApiResponse resp = new ApiResponse("Delete User Successfully!", Map.of("id", id));
+        return ResponseEntity.ok(resp);
     }
 
     private UserResponse toResponse(User user) {
