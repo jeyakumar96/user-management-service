@@ -1,0 +1,39 @@
+<header class="header">
+  <div class="header-left">
+    <div class="logo-container">
+      <img
+        src="https://kanini.com/wp-content/uploads/2022/06/Kanini-Logo.svg"
+        alt="Kanini Logo"
+        class="company-logo"
+      />
+    </div>
+  </div>
+
+  <div class="header-right">
+    <button
+      class="apps-menu-btn"
+      (click)="onAppsMenuClick()"
+      [class.active]="showAppsMenu"
+    >
+      <div class="apps-icon">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </button>
+
+    <div class="user-profile">
+      <img [src]="user.avatar" [alt]="user.name" class="user-avatar" />
+      <div class="user-info">
+        <span class="user-name">{{ user.name }}</span>
+        <span class="user-email">{{ user.email }}</span>
+      </div>
+    </div>
+  </div>
+</header>

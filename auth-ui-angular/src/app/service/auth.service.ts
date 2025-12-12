@@ -28,6 +28,8 @@ interface BackendLoginResponse {
   tokenType?: string;
 }
 
+type JwtPayload = { roles?: string[] };
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
@@ -49,6 +51,19 @@ export class AuthService {
       }),
       catchError(this.handleError)
     );
+  }
+
+  getRolesFromToken(): string[] {
+    const token = this.tokenSvc.getToken();
+    if (!token) return [];
+    const parts = token.split('.');
+    if (parts.length !== 3) return [];
+    try {
+      const json = JSON.parse(atob(parts[1])) as JwtPayload;
+      return Array.isArray(json.roles) ? json.roles : [];
+    } catch {
+      return [];
+    }
   }
 
   register(payload: RegisterRequest): Observable<AuthResponse> {

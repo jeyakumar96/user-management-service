@@ -36,8 +36,10 @@ export class Login {
           this.loading.set(false);
           if (res.success) {
             this.popup.showSuccess('Logged in successfully', { positionClass: 'popup-top-right' });
-            // For now, navigate to register after successful login per your request
-            this.router.navigateByUrl('/register');
+            // Decode roles from JWT and route accordingly
+            const roles = this.auth.getRolesFromToken();
+            const isAdmin = roles.includes('ROLE_ADMIN');
+            this.router.navigateByUrl(isAdmin ? '/admin' : '/dashboard');
           } else {
             this.serverError.set(res.message ?? 'Login failed');
             this.popup.showError(this.serverError()!, { positionClass: 'popup-top-right' });
