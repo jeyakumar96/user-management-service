@@ -1,15 +1,18 @@
 package com.example.auth_api_springboot.service.impl;
 
 import com.example.auth_api_springboot.entity.User;
+import com.example.auth_api_springboot.entity.UserImage;
 import com.example.auth_api_springboot.exception.APIException;
 import com.example.auth_api_springboot.exception.ResourceNotFoundException;
 import com.example.auth_api_springboot.payload.UserUpdateRequest;
 import com.example.auth_api_springboot.repository.UserRepository;
+import com.example.auth_api_springboot.repository.UserImageRepository;
 import com.example.auth_api_springboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,8 +21,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserImageRepository userImageRepository;
     private final PasswordEncoder passwordEncoder;
-
 
     @Override
     public List<User> getUsers() {
@@ -71,5 +74,58 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         userRepository.delete(user);
+    }
+
+    @Override
+    public User addUserImage(Long id, MultipartFile file) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+
+        if (file == null || file.isEmpty()) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "No file uploaded");
+        }
+        if (userImageRepository.existsByUser(user)) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "Image already exists for user. Use update endpoint.");
+        }
+
+        try {
+            UserImage img = new UserImage();
+            img.setUser(user);
+            img.setData(file.getBytes());
+            img.setContentType(file.getContentType());
+            img.setSize(file.getSize());
+            img.setUploadedAt(java.time.Instant.now());
+            userImageRepository.save(img);
+            return user;
+        } catch (java.io.IOException e) {
+            throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read uploaded file");
+        }
+    }
+
+    @Override
+    public User updateUserImage(Long id, MultipartFile file) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+
+        if (file == null || file.isEmpty()) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "No file uploaded");
+        }
+
+        try {
+            UserImage img = userImageRepository.findByUser(user)
+                    .orElseGet(() -> {
+                        UserImage ni = new UserImage();
+                        ni.setUser(user);
+                        return ni;
+                    });
+            img.setData(file.getBytes());
+            img.setContentType(file.getContentType());
+            img.setSize(file.getSize());
+            img.setUploadedAt(java.time.Instant.now());
+            userImageRepository.save(img);
+            return user;
+        } catch (java.io.IOException e) {
+            throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read uploaded file");
+        }
     }
 }

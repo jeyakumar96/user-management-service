@@ -17,4 +17,6 @@ public class UserResponse {
     private String username;
     private String email;
     private Set<String> roles;
+    // If present, indicates user has an image stored
+    private Boolean hasImage;
 }

@@ -41,7 +41,8 @@ public class AuthController {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRoles() == null ? null
-                        : user.getRoles().stream().map(r -> r.getName()).collect(java.util.stream.Collectors.toSet()));
+                        : user.getRoles().stream().map(r -> r.getName()).collect(java.util.stream.Collectors.toSet()),
+                Boolean.FALSE);
         ApiResponse api = new ApiResponse("Create User Success!", data);
         return new ResponseEntity<>(api, HttpStatus.CREATED);
     }
