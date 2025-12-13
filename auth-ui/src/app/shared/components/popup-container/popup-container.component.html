@@ -1,0 +1,35 @@
+<div class="popup-container-wrapper">
+  <div *ngFor="let popup of popups$ | async; trackBy: trackByPopup" class="popup-wrapper">
+    <!-- Success Popup -->
+    <app-popup-success
+      *ngIf="popup.type === 'success'"
+      [popup]="popup.data"
+      (closePopup)="onClosePopup($event)"
+    >
+    </app-popup-success>
+
+    <!-- Error Popup -->
+    <app-popup-error
+      *ngIf="popup.type === 'error'"
+      [popup]="popup.data"
+      (closePopup)="onClosePopup($event)"
+    >
+    </app-popup-error>
+
+    <!-- Warning Popup -->
+    <app-popup-warning
+      *ngIf="popup.type === 'warning'"
+      [popup]="popup.data"
+      (closePopup)="onClosePopup($event)"
+    >
+    </app-popup-warning>
+
+    <!-- Info Popup -->
+    <app-popup-info
+      *ngIf="popup.type === 'info'"
+      [popup]="popup.data"
+      (closePopup)="onClosePopup($event)"
+    >
+    </app-popup-info>
+  </div>
+</div>

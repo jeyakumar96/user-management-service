@@ -1,0 +1,238 @@
+.popup-overlay {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    // Position classes
+    &.popup-top-right {
+        top: 20px;
+        right: 20px;
+    }
+
+    &.popup-top-left {
+        top: 20px;
+        left: 20px;
+    }
+
+    &.popup-bottom-right {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    &.popup-bottom-left {
+        bottom: 20px;
+        left: 20px;
+    }
+
+    &.popup-center {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        &.visible {
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+.popup-container {
+    min-width: 350px;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: 'Lato', sans-serif;
+    will-change: transform, opacity;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    // Error specific styles
+    &.popup-error {
+        background: #FECACA;
+        border-left: 6px solid #EF4444;
+
+        .popup-icon {
+            color: #EF4444;
+        }
+
+        .popup-title {
+            color: #DC2626;
+        }
+
+        .popup-message {
+            color: #B91C1C;
+        }
+
+        .popup-close-btn:hover {
+            background: rgba(220, 38, 38, 0.1);
+        }
+    }
+}
+
+.popup-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 16px;
+    position: relative;
+}
+
+.popup-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.popup-svg-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.popup-text-icon {
+    display: inline-block;
+}
+
+.popup-content {
+    flex: 1;
+    margin-right: 30px;
+}
+
+.popup-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.popup-message {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.popup-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    padding: 4px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+
+    &:hover {
+        opacity: 1;
+        transform: scale(1.1);
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+    }
+}
+
+// Responsive design
+@media (max-width: 1200px) {
+    .popup-overlay {
+        &.popup-top-right {
+            right: 20px;
+        }
+    }
+
+    .popup-container {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .popup-overlay {
+
+        &.popup-top-right,
+        &.popup-top-left {
+            top: 20px;
+            left: 20px;
+            right: 20px;
+        }
+
+        &.popup-bottom-right,
+        &.popup-bottom-left {
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+        }
+    }
+
+    .popup-container {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .popup-header {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .popup-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .popup-content {
+        margin-right: 24px;
+    }
+
+    .popup-title {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .popup-message {
+        font-size: 13px;
+    }
+
+    .popup-close-btn {
+        top: 16px;
+        right: 16px;
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+    }
+}

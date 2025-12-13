@@ -1,0 +1,22 @@
+<div class="popup-overlay" [class]="getPositionClass()" [class.visible]="isVisible" *ngIf="popup">
+  <div class="popup-container popup-success">
+    <div class="popup-header">
+      <div class="popup-icon">
+        <!-- SVG Icon -->
+        <img *ngIf="getIconType() === 'svg'" [src]="getIcon()" alt="success icon" class="popup-svg-icon" />
+
+        <!-- Text Icon -->
+        <span *ngIf="getIconType() === 'text'" class="popup-text-icon">{{
+          getIcon()
+          }}</span>
+      </div>
+      <div class="popup-content">
+        <h4 *ngIf="popup.title" class="popup-title">{{ popup.title }}</h4>
+        <p class="popup-message">{{ popup.message }}</p>
+      </div>
+      <button *ngIf="popup.showCloseButton" class="popup-close-btn" (click)="close()" type="button">
+        ✕
+      </button>
+    </div>
+  </div>
+</div>
