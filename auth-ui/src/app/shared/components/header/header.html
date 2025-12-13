@@ -10,13 +10,16 @@
   </div>
 
   <div class="header-right">
-
     <div class="user-profile">
       <img [src]="user.avatar" [alt]="user.name" class="user-avatar" />
       <div class="user-info">
         <span class="user-name">{{ user.name }}</span>
         <span class="user-email">{{ user.email }}</span>
       </div>
+      <button mat-button color="warn" class="logout-btn" (click)="logout()" aria-label="Sign Out">
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
     </div>
   </div>
 </header>
