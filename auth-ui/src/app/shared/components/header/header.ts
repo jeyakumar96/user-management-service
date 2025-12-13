@@ -5,6 +5,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { PopupManagerService } from '../popup-manager.service';
 
 @Component({
   selector: 'app-header',
@@ -19,16 +20,17 @@ export class Header {
     name: 'Jeyakumar Moorthy',
     email: 'jeyakumar.moorthy@kanini.com',
     avatar: 'Myphoto.jpg'
-    };
+  };
 
   showAppsMenu = false;
 
-  constructor(private authService: AuthService, private router: Router, public dialog: MatDialog) {}
+  constructor(private authService: AuthService, private router: Router, public dialog: MatDialog, private popup: PopupManagerService) { }
 
 
 
-    logout(): void {
+  logout(): void {
     this.authService.logout();
+    this.popup.showInfo('Signed out successfully');
     this.router.navigate(['/login']);
   }
 }
