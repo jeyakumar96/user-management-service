@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PopupContainerComponent } from "./shared/components/popup-container/popup-container.component";
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, PopupContainerComponent],

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Auth } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { PopupManagerService } from '../../shared/components/popup-manager.service';
 
 @Component({
@@ -14,7 +14,7 @@ import { PopupManagerService } from '../../shared/components/popup-manager.servi
 export class Register {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private auth = inject(Auth);
+  private auth = inject(AuthService);
   private popup = inject(PopupManagerService);
 
   readonly form = this.fb.nonNullable.group({
